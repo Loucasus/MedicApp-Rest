@@ -4,12 +4,15 @@ import java.net.UnknownHostException;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
 public class MongoDBSingleton {
 
 	private static MongoDBSingleton mDbSingleton;
 	
 	private static MongoClient mongoClient;
+
+	private  static MongoClientURI uri;
     
 	private static DB db ;
 	
@@ -32,16 +35,17 @@ public class MongoDBSingleton {
 	public DB getTestdb(){
 		if(mongoClient == null){
 			try {
-				mongoClient = new MongoClient(dbHost , dbPort);
+				MongoClientURI uri = new MongoClientURI("mongodb://userCPE:userCPE2017@ds133378.mlab.com:33378/medicappcpe");
+				mongoClient = new MongoClient(uri);
 			} catch (UnknownHostException e) {
 				return null;
 			}
 		}
 		if(db == null)
-			db = mongoClient.getDB(dbName);
-		if(!db.isAuthenticated()){
+			db = mongoClient.getDB(uri.getDatabase());
+		/*if(!db.isAuthenticated()){
 			boolean auth = db.authenticate(dbUser, dbPassword.toCharArray());
-		}
+		}*/
 		return db;
 	}
 }
