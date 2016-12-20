@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoDatabase;
 
 public class MongoDBSingleton {
 
@@ -14,7 +15,7 @@ public class MongoDBSingleton {
 
 	private  static MongoClientURI uri;
     
-	private static DB db ;
+	private static MongoDatabase db ;
 	
 	
 	private static final String dbHost = "ds133378.mlab.com";
@@ -32,17 +33,13 @@ public class MongoDBSingleton {
 		return mDbSingleton;
 	} 
 	
-	public DB getTestdb(){
+	public MongoDatabase getTestdb(){
 		if(mongoClient == null){
-			try {
-				MongoClientURI uri = new MongoClientURI("mongodb://userCPE:userCPE2017@ds133378.mlab.com:33378/medicappcpe");
-				mongoClient = new MongoClient(uri);
-			} catch (UnknownHostException e) {
-				return null;
-			}
+			uri = new MongoClientURI("mongodb://PozorVlak:BadGones87@ds133378.mlab.com:33378/medicappcpe");
+			mongoClient = new MongoClient(uri);
 		}
 		if(db == null)
-			db = mongoClient.getDB(uri.getDatabase());
+			db = mongoClient.getDatabase(uri.getDatabase());
 		/*if(!db.isAuthenticated()){
 			boolean auth = db.authenticate(dbUser, dbPassword.toCharArray());
 		}*/
