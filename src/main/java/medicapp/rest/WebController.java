@@ -16,11 +16,16 @@
  */
 package medicapp.rest;
 
+import com.mongodb.*;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple REST service which is able to say hello to someone using HelloService Please take a look at the web.xml where JAX-RS
@@ -46,6 +51,30 @@ public class WebController {
     @Produces("text/plain")
     public String showMsg(@PathParam("message") String message){
         return message;
+    }
+
+    @GET
+    @Path("/getDoctor")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Users> getUsers() {
+        MongoDBSingleton dbSingleton = MongoDBSingleton.getInstance();
+        DB db = dbSingleton.getTestdb();
+        DBCollection coll = db.getCollection("users");
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("statut", "Docteur");
+        DBCursor cursor = coll.find(searchQuery);
+        List<Users> list = new ArrayList<Users>();
+        while (cursor.hasNext()) {
+            DBObject o = cursor.next();
+            Users users = new Users();
+            users.setPrenom((String) o.get("prenom"));
+            users.setNom((String) o.get("nom"));
+            users.setStatut((String) o.get("statut"));
+            users.setLogin((String) o.get("login"));
+            users.setPwd((String) o.get("pwd"));
+            list.add(users);
+        }
+        return list;
     }
 
 }

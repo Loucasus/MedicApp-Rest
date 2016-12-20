@@ -3,7 +3,7 @@ package medicapp.rest;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "Users")
+@XmlRootElement(name = "users")
 public class Users {
 
 	private String prenom;
